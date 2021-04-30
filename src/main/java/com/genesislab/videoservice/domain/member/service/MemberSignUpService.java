@@ -6,6 +6,7 @@ import com.genesislab.videoservice.domain.member.exception.EmailDuplicateExcepti
 import com.genesislab.videoservice.domain.member.repository.MemberRepository;
 import com.genesislab.videoservice.domain.model.Email;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberSignUpService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Member doSignUp(final SignUpRequest signUpRequest) {
 
@@ -25,6 +27,9 @@ public class MemberSignUpService {
         }
 
         Member member = signUpRequest.toEntity();
+        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword().getValue());
+        member.encodePassword(encodedPassword);
+
         return memberRepository.save(member);
     }
 }

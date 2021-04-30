@@ -1,4 +1,4 @@
-package com.genesislab.videoservice.global.config;
+package com.genesislab.videoservice.global.config.domain;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

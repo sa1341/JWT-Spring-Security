@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MemberController {
 
-    @GetMapping(value = "/sign-up")
+    @GetMapping(value = "/signUp")
     public String signUp() {
         return "sign-up";
+    }
+
+    @GetMapping(value = "/signIn")
+    public String signIn() {
+        return "sign-in";
     }
 }

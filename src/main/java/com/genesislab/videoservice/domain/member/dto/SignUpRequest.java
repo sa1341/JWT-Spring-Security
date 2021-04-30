@@ -1,10 +1,7 @@
 package com.genesislab.videoservice.domain.member.dto;
 
 import com.genesislab.videoservice.domain.member.entity.Member;
-import com.genesislab.videoservice.domain.model.Email;
-import com.genesislab.videoservice.domain.model.Name;
-import com.genesislab.videoservice.domain.model.Password;
-import com.genesislab.videoservice.domain.model.PhoneNumber;
+import com.genesislab.videoservice.domain.model.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +32,7 @@ public class SignUpRequest {
                 .name(name)
                 .password(password)
                 .phoneNumber(phoneNumber)
+                .role(Role.USER)
                 .build();
     }
 }
