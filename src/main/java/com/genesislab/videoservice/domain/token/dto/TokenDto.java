@@ -11,14 +11,16 @@ import lombok.ToString;
 public class TokenDto {
 
     private String email;
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 
-    private TokenDto(String email, String token) {
+    private TokenDto(String email, String accessToken, String refreshToken) {
         this.email = email;
-        this.token = token;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
-    public static TokenDto of(String email, String token) {
-        return new TokenDto(email, token);
+    public static TokenDto of(String email, String accessToken, String refreshToken) {
+        return new TokenDto(email, accessToken, refreshToken);
     }
 }

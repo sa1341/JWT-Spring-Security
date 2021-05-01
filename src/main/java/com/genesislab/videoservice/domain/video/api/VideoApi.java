@@ -1,14 +1,8 @@
 package com.genesislab.videoservice.domain.video.api;
 
 import com.genesislab.videoservice.domain.member.entity.CustomUserDetails;
-import com.genesislab.videoservice.domain.member.entity.Member;
-import com.genesislab.videoservice.domain.member.service.MemberSearchService;
-import com.genesislab.videoservice.domain.model.Email;
-import com.genesislab.videoservice.domain.video.dto.VideoResponse;
 import com.genesislab.videoservice.domain.video.service.VideoService;
 import com.genesislab.videoservice.global.auth.JwtTokenProvider;
-import com.genesislab.videoservice.global.error.exception.ErrorCode;
-import com.genesislab.videoservice.global.error.exception.InvalidException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

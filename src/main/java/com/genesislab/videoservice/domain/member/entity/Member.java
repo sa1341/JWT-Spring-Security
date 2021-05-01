@@ -1,6 +1,7 @@
 package com.genesislab.videoservice.domain.member.entity;
 
 import com.genesislab.videoservice.domain.model.*;
+import com.genesislab.videoservice.domain.token.entity.RefreshToken;
 import com.genesislab.videoservice.domain.video.entity.Video;
 import com.genesislab.videoservice.global.entity.BaseTimeEntity;
 import lombok.*;
@@ -33,6 +34,9 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private PhoneNumber phoneNumber;
 
+    @Column(name = "unsubscribable")
+    private boolean unsubscribable = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
     private Role role;
@@ -40,8 +44,11 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Video> videos = new ArrayList<>();
 
+    @OneToOne(mappedBy = "member", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RefreshToken refreshToken;
+
     @Builder
-    public Member(Email email, Password password,  Name name, PhoneNumber phoneNumber, Role role) {
+    public Member(Email email, Password password, Name name, PhoneNumber phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -57,4 +64,11 @@ public class Member extends BaseTimeEntity {
         this.password = Password.of(encodedPassword);
     }
 
+    public void setRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public boolean hasRefreshToken() {
+        return this.refreshToken != null ? true: false;
+    }
 }

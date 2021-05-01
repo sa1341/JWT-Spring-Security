@@ -29,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public static CustomUserDetails of(final Member member) {
-        return new CustomUserDetails(member.getEmail().getValue(), member.getPassword().getValue(), member.getName().getValue(), member.getRoleKey());
+        return new CustomUserDetails(member.getEmail().getValue(), "", member.getName().getValue(), member.getRoleKey());
     }
 
     @Override

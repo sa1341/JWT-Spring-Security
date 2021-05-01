@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(HEAD_AUTH);
 
-        if (StringUtils.hasText(token) && jwtTokenProvider.isValid(token)) {
+        if (StringUtils.hasText(token) && !jwtTokenProvider.isExpiredToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }

@@ -50,8 +50,8 @@ const index = {
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data),
             success: function (data) {
-                alert(data.token);
-                localStorage.setItem("token", data.token);
+                localStorage.setItem("accessToken", data.accessToken);
+                localStorage.setItem("refreshToken", data.refreshToken);
                 window.location.href = '/';
             },
             error: function (error) {
@@ -77,9 +77,8 @@ const index = {
             contentType: false,
             cache: false,
             beforeSend: function (xhr) {
-                const token = localStorage.getItem("token");
-                console.log(token);
-                xhr.setRequestHeader("Authorization",token);
+                const accessToken = localStorage.getItem("accessToken");
+                xhr.setRequestHeader("Authorization", accessToken);
             },
             success: function(data){
                 alert("업로드 성공!!");
