@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import static com.genesislab.videoservice.domain.member.entity.QMember.*;
 import static com.genesislab.videoservice.domain.video.entity.QVideo.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -59,8 +60,11 @@ public class VideoRepositoryTests {
         String fileName2 = path2.getFileName().toString();
         String filePath2 = path2.toAbsolutePath().toString();
 
-        Video video1 = Video.of(Name.of(fileName1), FilePath.of(filePath1), member);
-        Video video2 = Video.of(Name.of(fileName2), FilePath.of(filePath2), member);
+        Video video1 = Video.of(Name.of(fileName1), FilePath.of(filePath1));
+        Video video2 = Video.of(Name.of(fileName2), FilePath.of(filePath2));
+
+        video1.addMember(member);
+        video2.addMember(member);
 
         videoRepository.save(video1);
         videoRepository.save(video2);
@@ -72,13 +76,16 @@ public class VideoRepositoryTests {
         Member member = memberRepository.findByEmail(Email.of("a79007713@gmail.com")).get();
 
         //when
-        List<Video> videos = videoRepository.findByMember(member);
+        List<Video> videos = member.getVideos();
+        System.out.println(member.getName().getValue());
 
         videos.forEach(video -> {
             System.out.println(video.getMember().getEmail().getValue());
             System.out.println(video.getFilePath().getValue());
             System.out.println(video.getName().getValue());
         });
+
+        assertThat(videos).extracting("member.email.value").contains("a79007713@gmail.com");
     }
 
     @Test

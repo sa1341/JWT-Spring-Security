@@ -27,7 +27,6 @@ public class VideoApi {
 
     private final VideoService videoService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberSearchService memberSearchService;
 
     @GetMapping
     public String getVideo() {
@@ -40,11 +39,12 @@ public class VideoApi {
 
     @PostMapping
     public ResponseEntity<String> uploadVideo(@RequestParam("files") final MultipartFile[] files) throws Exception {
-        log.info("파일 업로드 프로세스");;
+        log.debug("파일 업로드 프로세스");;
         UserDetails userDetails = jwtTokenProvider.getUserDetails();
-        log.debug("userName: {}", userDetails.getUsername());
-        Member member = memberSearchService.searchByEmail(Email.of(userDetails.getUsername()));
-        videoService.saveVideo(files, member);
+        String email = userDetails.getUsername();
+        log.debug("userName: {}", email);
+
+        videoService.saveVideo(files, email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

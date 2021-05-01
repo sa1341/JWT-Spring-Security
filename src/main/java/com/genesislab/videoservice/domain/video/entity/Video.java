@@ -31,13 +31,20 @@ public class Video extends BaseTimeEntity {
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
 
-    private Video(Name name, FilePath filePath, Member member) {
+    private Video(Name name, FilePath filePath) {
         this.name = name;
         this.filePath = filePath;
-        this.member = member;
     }
 
-    public static Video of(final Name name, final FilePath filePath, final Member member) {
-        return new Video(name, filePath, member);
+    public static Video of(final Name name, final FilePath filePath) {
+        return new Video(name, filePath);
+    }
+
+    public void addMember(final Member member) {
+        if (this.member != null) {
+            this.member.getVideos().remove(this);
+        }
+        this.member = member;
+        this.member.getVideos().add(this);
     }
 }
