@@ -13,7 +13,6 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = {"id"})
 @ToString(of = {"email", "name", "phoneNumber"})
 @Entity
 public class Member extends BaseTimeEntity {

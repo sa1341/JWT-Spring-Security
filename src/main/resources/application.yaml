@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/genesislab
+    username: junyoung
+    password: wnsdud@123
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+
+logging:
+  level:
+    root: info
+    com.genesislab.videoservice: debug
+    org.hibernate.SQL: info
+    # org.hibernate.type: trace
+
+jwt:
+  secret:
+    key: secret
+
+file:
+  storage:
+    path: /Users/limjun-young/workspace/privacy/dev/test/video
