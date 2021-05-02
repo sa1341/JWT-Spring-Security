@@ -26,7 +26,7 @@ public class MemberSignUpService {
             throw new EmailDuplicateException(email);
         }
 
-        Member member = signUpRequest.toEntity();
+        final Member member = signUpRequest.toEntity();
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword().getValue());
         member.encodePassword(encodedPassword);
 

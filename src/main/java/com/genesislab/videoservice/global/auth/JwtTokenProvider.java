@@ -4,6 +4,8 @@ import com.genesislab.videoservice.domain.member.entity.Member;
 import com.genesislab.videoservice.domain.member.service.MemberSearchService;
 import com.genesislab.videoservice.domain.model.Email;
 import com.genesislab.videoservice.domain.token.dto.TokenDto;
+import com.genesislab.videoservice.global.error.exception.ErrorCode;
+import com.genesislab.videoservice.global.error.exception.InvalidException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -75,8 +77,12 @@ public class JwtTokenProvider {
         return jwt;
     }
 
-    public String getUserEmail(final String jwt) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwt).getBody().get("id", String.class);
+    public String getUserEmail(final String jwt) throws InvalidException {
+        try {
+            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwt).getBody().get("id", String.class);
+        } catch (Exception e) {
+            throw new InvalidException(ErrorCode.ACCESS_TOKEN_INVALID);
+        }
     }
 
     public Authentication getAuthentication(final String jwt) {
@@ -93,7 +99,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token);
-             return claims.getBody().getExpiration().before(new Date());
+            return claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }

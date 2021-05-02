@@ -30,9 +30,9 @@ public class AuthTokenService {
 
     @Transactional
     public TokenDto generateToken(final Member member) {
-        TokenDto tokenDto = jwtTokenProvider.generateJwtToken(member);
-        Member findMember = getMember(member.getEmail().getValue());
-        RefreshToken refreshToken = RefreshToken.of(tokenDto.getRefreshToken());
+        final TokenDto tokenDto = jwtTokenProvider.generateJwtToken(member);
+        final Member findMember = deleteDupRefreshToken(member.getEmail().getValue());
+        final RefreshToken refreshToken = RefreshToken.of(tokenDto.getRefreshToken());
         refreshToken.addMember(findMember);
         refreshTokenRepository.save(refreshToken);
         return tokenDto;
@@ -42,23 +42,34 @@ public class AuthTokenService {
     public TokenDto reissue(final TokenRequest tokenRequest) {
         String refreshToken = tokenRequest.getRefreshToken();
 
+        // 리프레시 토큰 만료 기한 체크
         if (jwtTokenProvider.isExpiredToken(refreshToken)) {
             throw new InvalidException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
 
         String email = jwtTokenProvider.getUserEmail(tokenRequest.getAccessToken());
-        Member findMember = getMemberWithRefreshToken(email);
+        // 회원과 토큰 엔티티는 1:1 관계라서 기존에 존재하면 삭제 후 재발급하는 로직
+        final Member findMember = deleteDupRefreshToken(email);
+
+        final TokenDto tokenDto = jwtTokenProvider.generateJwtToken(findMember);
+        final RefreshToken newRefreshToken = RefreshToken.of(tokenDto.getRefreshToken());
+        newRefreshToken.addMember(findMember);
+        refreshTokenRepository.save(newRefreshToken);
+
+        return tokenDto;
+    }
+
+    private Member deleteDupRefreshToken(final String email) {
+        final Member findMember = getMemberWithRefreshToken(email);
 
         if (findMember.hasRefreshToken()) {
             refreshTokenRepository.delete(findMember.getRefreshToken());
         }
-
-        TokenDto tokenDto = jwtTokenProvider.generateJwtToken(findMember);
-        return tokenDto;
+        return findMember;
     }
 
     private Member getMemberWithRefreshToken(final String email) {
-        Member findMember = queryFactory.select(member)
+        final Member findMember = queryFactory.select(member)
                 .from(member)
                 .leftJoin(member.refreshToken, refreshToken)
                 .fetchJoin()
@@ -68,8 +79,8 @@ public class AuthTokenService {
         return findMember;
     }
 
-    private Member getMember(final String email) {
-        Member member = queryFactory.select(QMember.member)
+    public Member getMember(final String email) {
+        final Member member = queryFactory.select(QMember.member)
                 .from(QMember.member)
                 .where(QMember.member.email.value.eq(email))
                 .fetchOne();

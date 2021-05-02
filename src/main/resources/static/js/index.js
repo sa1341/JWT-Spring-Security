@@ -10,7 +10,7 @@ const index = {
         });
 
         $("#uploadBtn").on("click", function (event) {
-           _this.uploadVideo(event);
+            _this.uploadVideo(event);
         });
     },
     signUp: function () {
@@ -78,9 +78,11 @@ const index = {
             cache: false,
             beforeSend: function (xhr) {
                 const accessToken = localStorage.getItem("accessToken");
-                xhr.setRequestHeader("Authorization", accessToken);
+                if (accessToken) {
+                    xhr.setRequestHeader("Authorization", accessToken);
+                }
             },
-            success: function(data){
+            success: function (data) {
                 alert("업로드 성공!!");
                 $("#uploadBtn").prop("disabled", false);
             },

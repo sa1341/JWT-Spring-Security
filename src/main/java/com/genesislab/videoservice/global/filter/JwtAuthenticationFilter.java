@@ -1,6 +1,7 @@
 package com.genesislab.videoservice.global.filter;
 
 import com.genesislab.videoservice.global.auth.JwtTokenProvider;
+import com.genesislab.videoservice.global.error.exception.InvalidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     private static final String HEAD_AUTH = "Authorization";
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws InvalidException, IOException, ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(HEAD_AUTH);

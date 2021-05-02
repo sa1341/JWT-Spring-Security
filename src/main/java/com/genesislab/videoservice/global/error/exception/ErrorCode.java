@@ -17,7 +17,11 @@ public enum ErrorCode {
     EMAIL_DUPLICATION(400, "Email is duplicated"),
     PASSWORD_NOT_MATCHED(400, "Password is not matched"),
     LOGIN_INPUT_INVALID(400, "Login Input is invalid"),
-    REFRESH_TOKEN_EXPIRED(401, "RefreshToken is invalid");
+
+
+    // TOKEN
+    REFRESH_TOKEN_EXPIRED(401, "RefreshToken is invalid"),
+    ACCESS_TOKEN_INVALID(401, "AccessToken is invalid");
 
     private final int status;
     private final String message;

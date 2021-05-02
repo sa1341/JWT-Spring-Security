@@ -1,20 +1,20 @@
 package com.genesislab.videoservice.domain.member.api;
 
 import com.genesislab.videoservice.domain.member.dto.MemberResponse;
+import com.genesislab.videoservice.domain.member.dto.MemberUpdateReq;
 import com.genesislab.videoservice.domain.member.dto.SignInRequest;
 import com.genesislab.videoservice.domain.member.dto.SignUpRequest;
 import com.genesislab.videoservice.domain.member.entity.Member;
-import com.genesislab.videoservice.domain.member.service.MemberSearchService;
+import com.genesislab.videoservice.domain.member.service.MemberService;
 import com.genesislab.videoservice.domain.member.service.MemberSignUpService;
 import com.genesislab.videoservice.domain.token.dto.TokenDto;
 import com.genesislab.videoservice.domain.token.dto.TokenRequest;
 import com.genesislab.videoservice.domain.token.service.AuthTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -24,7 +24,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/api/members")
 public class MemberApi {
 
-    private final MemberSearchService memberSearchService;
+    private final MemberService memberService;
     private final MemberSignUpService memberSignUpService;
     private final AuthTokenService authTokenService;
 
@@ -38,7 +38,7 @@ public class MemberApi {
     @PostMapping(value = "signIn")
     public TokenDto signIn(@RequestBody @Valid final SignInRequest signInRequest) {
         log.debug("Parameter Info: {}", signInRequest);
-        Member member = memberSearchService.validateMemberInfo(signInRequest);
+        Member member = memberService.validateMemberInfo(signInRequest);
         TokenDto tokenDto = authTokenService.generateToken(member);
         return tokenDto;
     }
@@ -46,5 +46,18 @@ public class MemberApi {
     @PostMapping(value = "/reissue")
     public TokenDto reissue(@RequestBody @Valid final TokenRequest tokenRequest) {
         return authTokenService.reissue(tokenRequest);
+    }
+
+    @DeleteMapping(value = "/{email}")
+    public ResponseEntity<String> unsubscribe(@PathVariable(name = "email") final String email) {
+        memberService.unsubscribe(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{email}")
+    public MemberUpdateReq updateProfile(@PathVariable(name = "email") final String email,
+                                                @RequestBody final MemberUpdateReq updateReq) {
+        MemberUpdateReq memberUpdateReq = memberService.updateProfile(email, updateReq);
+        return memberUpdateReq;
     }
 }

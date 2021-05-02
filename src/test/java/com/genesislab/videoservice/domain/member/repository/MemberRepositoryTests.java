@@ -2,10 +2,7 @@ package com.genesislab.videoservice.domain.member.repository;
 
 import com.genesislab.videoservice.domain.member.entity.Member;
 import com.genesislab.videoservice.domain.member.entity.QMember;
-import com.genesislab.videoservice.domain.model.Email;
-import com.genesislab.videoservice.domain.model.Name;
-import com.genesislab.videoservice.domain.model.Password;
-import com.genesislab.videoservice.domain.model.PhoneNumber;
+import com.genesislab.videoservice.domain.model.*;
 import com.genesislab.videoservice.global.error.exception.BusinessException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +35,7 @@ public class MemberRepositoryTests {
                 .password(Password.of("wnsdud@123"))
                 .name(Name.of("임준영"))
                 .phoneNumber(PhoneNumber.of("010-7900-7714"))
+                .role(Role.USER)
                 .build();
 
         memberRepository.save(member);

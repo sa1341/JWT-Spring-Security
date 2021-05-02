@@ -71,4 +71,20 @@ public class Member extends BaseTimeEntity {
     public boolean hasRefreshToken() {
         return this.refreshToken != null ? true: false;
     }
+
+    public void changeUnsubscribableStatus() {
+        setUnsubscribable(true);
+    }
+
+    private void setUnsubscribable(boolean unsubscribable) {
+        this.unsubscribable = unsubscribable;
+    }
+
+    public void updateProfile(final Name name) {
+        setName(name);
+    }
+
+    private void setName(Name name) {
+        this.name = name;
+    }
 }
