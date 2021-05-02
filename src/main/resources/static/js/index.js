@@ -33,6 +33,7 @@ const index = {
                 }
             },
             success: function (data) {
+                $("#tbody").empty();
                 const length = data.count;
                 let row = '';
 
@@ -42,10 +43,9 @@ const index = {
                                 <td>${data.memberResponses[i].name.value}</td> 
                                 <td>${data.memberResponses[i].phoneNumber.value}</td> 
                                 </tr>`;
-                    row += row;
-                }
-                $("#tbody").empty();
+                    //row += row;
                 $("#tbody").append(row);
+                }
             },
             error: function (error) {
                 alert(JSON.stringify(error));
