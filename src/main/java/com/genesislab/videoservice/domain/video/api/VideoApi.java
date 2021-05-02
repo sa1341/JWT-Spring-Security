@@ -22,13 +22,13 @@ public class VideoApi {
     private final VideoService videoService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    // 비디오 스트리밍 서비스 REST API
     @GetMapping("/{email}/download")
     public StreamingResponseBody getVideo(@PathVariable(name = "email") final String email) throws IOException {
-        UserDetails userDetails = jwtTokenProvider.getUserDetails();
-        log.debug("userName: {}", userDetails.getUsername());
         return videoService.stream(email);
     }
 
+    // 비디오 업로드 서비스 REST API
     @PostMapping
     public ResponseEntity<String> uploadVideo(@RequestParam("files") final MultipartFile[] files) throws Exception {
         log.debug("파일 업로드 프로세스");;

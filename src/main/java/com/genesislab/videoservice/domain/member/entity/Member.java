@@ -1,5 +1,6 @@
 package com.genesislab.videoservice.domain.member.entity;
 
+import com.genesislab.videoservice.domain.member.dto.MemberResponse;
 import com.genesislab.videoservice.domain.model.*;
 import com.genesislab.videoservice.domain.token.entity.RefreshToken;
 import com.genesislab.videoservice.domain.video.entity.Video;
@@ -86,5 +87,9 @@ public class Member extends BaseTimeEntity {
 
     private void setName(Name name) {
         this.name = name;
+    }
+
+    public MemberResponse toResponse() {
+        return new MemberResponse(this);
     }
 }

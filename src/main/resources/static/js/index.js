@@ -12,7 +12,47 @@ const index = {
         $("#uploadBtn").on("click", function (event) {
             _this.uploadVideo(event);
         });
+
+        $("#dateQuery").on("click", function (event) {
+            _this.getQueries(event);
+        });
     },
+
+    getQueries: function () {
+        const startDate = $("#startDate").val();
+        const endDate = $("#endDate").val();
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/admin/members?startDate=' + startDate + '&endDate=' + endDate,
+            contentType: 'text/html; charset=utf-8',
+            beforeSend: function (xhr) {
+                const accessToken = localStorage.getItem("accessToken");
+                if (accessToken) {
+                    xhr.setRequestHeader("Authorization", accessToken);
+                }
+            },
+            success: function (data) {
+                const length = data.count;
+                let row = '';
+
+                for (let i = 0; i < length; i++) {
+                    row = `<tr> 
+                                <td>${data.memberResponses[i].email.value}</td> 
+                                <td>${data.memberResponses[i].name.value}</td> 
+                                <td>${data.memberResponses[i].phoneNumber.value}</td> 
+                                </tr>`;
+                    row += row;
+                }
+                $("#tbody").empty();
+                $("#tbody").append(row);
+            },
+            error: function (error) {
+                alert(JSON.stringify(error));
+            }
+        });
+    },
+
     signUp: function () {
         let data = {
             name: $("#name").val(),

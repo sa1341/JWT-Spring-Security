@@ -1,0 +1,33 @@
+{{>layout/header}}
+<h1>회원 통계</h1>
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="startDate">조회 시작</label>
+                <input type="date" class="form-control"
+                       id="startDate" placeholder="조회 시작날짜를 입력하세요.">
+            </div>
+            <div class="form-group">
+                <label for="endDate">조회 종료</label>
+                <input type="date" class="form-control"
+                       id="endDate" placeholder="조회 종료 날짜를 입력하세요.">
+            </div>
+        </form>
+        <a href="/" role="button" class="btn btn-secondary">취소</a>
+        <button type="button" class="btn btn-primary" id="dateQuery">조회 요청</button>
+    </div>
+</div>
+<br>
+<table class="table table-horizontal table-bordered">
+    <thead class="thead-strong">
+    <tr>
+        <th>이메일</th>
+        <th>이름</th>
+        <th>전화번호</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+</table>
+{{>layout/footer}}

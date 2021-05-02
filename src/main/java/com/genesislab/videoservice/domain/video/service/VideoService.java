@@ -16,9 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,10 +70,17 @@ public class VideoService {
             byte[] bytes = file.getBytes();
             String fileName = file.getOriginalFilename();
             log.debug("OriginalFilename: {}", fileName);
-            final Path path = Paths.get(storageDir, fileName);
-            Files.write(path, bytes);
+            final Path dir = Paths.get(storageDir, UUID.randomUUID().toString());
 
-            final Video video = Video.of(Name.of(fileName), FilePath.of(path.toAbsolutePath().toString()));
+            if (!Files.exists(dir)) {
+                Files.createDirectories(dir);
+            }
+
+            final Path videoPath = Paths.get(dir.toAbsolutePath().toString(), fileName);
+
+            Files.write(videoPath, bytes);
+
+            final Video video = Video.of(Name.of(fileName), FilePath.of(videoPath.toAbsolutePath().toString()));
             video.addMember(member);
             videoRepository.save(video);
         }
