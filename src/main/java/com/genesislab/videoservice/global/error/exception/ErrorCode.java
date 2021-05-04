@@ -18,10 +18,14 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCHED(400, "Password is not matched"),
     LOGIN_INPUT_INVALID(400, "Login Input is invalid"),
 
+    // Video
+    VIDEO_NOT_FOUND(404, "VideoFile is not found"),
+
 
     // TOKEN
     REFRESH_TOKEN_EXPIRED(401, "RefreshToken is invalid"),
     ACCESS_TOKEN_INVALID(401, "AccessToken is invalid");
+
 
     private final int status;
     private final String message;

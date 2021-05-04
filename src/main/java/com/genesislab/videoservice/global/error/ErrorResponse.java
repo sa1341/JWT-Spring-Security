@@ -30,7 +30,7 @@ public class ErrorResponse {
         this.status = errorCode.getStatus();
         this.errors = new ArrayList<>();
     }
-
+    // FieldError를 static 키워드르 붙인 이유는 ErrorResponse 객체의 인스턴스 생성 없이 처리하기 위해서 붙였습니다.
     public static ErrorResponse of(final ErrorCode errorCode, final BindingResult bindingResult) {
         return new ErrorResponse(errorCode, ErrorResponse.FieldError.of(bindingResult));
     }

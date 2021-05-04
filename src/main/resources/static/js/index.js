@@ -26,12 +26,6 @@ const index = {
             type: 'GET',
             url: '/api/admin/members?startDate=' + startDate + '&endDate=' + endDate,
             contentType: 'text/html; charset=utf-8',
-            beforeSend: function (xhr) {
-                const accessToken = localStorage.getItem("accessToken");
-                if (accessToken) {
-                    xhr.setRequestHeader("Authorization", accessToken);
-                }
-            },
             success: function (data) {
                 $("#tbody").empty();
                 const length = data.count;
@@ -116,12 +110,6 @@ const index = {
             processData: false,
             contentType: false,
             cache: false,
-            beforeSend: function (xhr) {
-                const accessToken = localStorage.getItem("accessToken");
-                if (accessToken) {
-                    xhr.setRequestHeader("Authorization", accessToken);
-                }
-            },
             success: function (data) {
                 alert("업로드 성공!!");
                 $("#uploadBtn").prop("disabled", false);

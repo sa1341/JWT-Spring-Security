@@ -25,9 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/members/signIn", "/api/members/signUp", "/api/videos/{email}/download").permitAll()
-                .antMatchers( "/api/members/**", "/api/videos/**").hasRole("USER")
-                .antMatchers("/api/admin/members").hasRole("ADMIN");
+                .antMatchers("/api/members/signIn", "/api/members/signUp").permitAll()
+                .antMatchers( "/api/members/**", "/api/videos/**", "/videos/**").hasRole("USER")
+                .antMatchers("/api/admin/members", "/admin").hasRole("ADMIN");
 
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }

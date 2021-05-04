@@ -7,6 +7,8 @@ import com.genesislab.videoservice.domain.model.Name;
 import com.genesislab.videoservice.domain.video.entity.Video;
 import com.genesislab.videoservice.domain.video.model.FilePath;
 import com.genesislab.videoservice.domain.video.repository.VideoRepository;
+import com.genesislab.videoservice.global.error.exception.EntityNotFoundException;
+import com.genesislab.videoservice.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,14 +40,19 @@ public class VideoService {
     @Transactional
     public StreamingResponseBody stream(final String email) throws IOException {
         final Member member = memberSearchService.searchByEmail(Email.of(email));
-        final Video video = member.getVideos().get(0);
-        final String filePath = video.getFilePath().getValue();
-        final File videoFile = new File(filePath);
+        final Optional<Video> video = member.getVideos().stream().filter(VideoService::checkExistFile).findFirst();
+        video.orElseThrow(() -> new EntityNotFoundException(ErrorCode.VIDEO_NOT_FOUND.getMessage()));
+        final File videoFile = new File(video.get().getFilePath().getValue());
         final InputStream is = new FileInputStream(videoFile);
 
         return os -> {
             readAndWrite(is, os);
         };
+    }
+
+    private static boolean checkExistFile(final Video video) {
+        Path videoFile = Paths.get(video.getFilePath().getValue());
+        return Files.exists(videoFile) && !Files.isDirectory(videoFile);
     }
 
     private void readAndWrite(InputStream is, OutputStream os) throws IOException {

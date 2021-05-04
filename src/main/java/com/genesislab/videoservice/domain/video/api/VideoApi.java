@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,17 +24,18 @@ public class VideoApi {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 비디오 스트리밍 서비스 REST API
-    @GetMapping("/{email}/download")
-    public StreamingResponseBody getVideo(@PathVariable(name = "email") final String email) throws IOException {
+    @GetMapping("/download")
+    public StreamingResponseBody getVideo(@CookieValue(name = "accessToken") final String accessToken) throws IOException {
+        String email = jwtTokenProvider.getUserEmail(accessToken);
         return videoService.stream(email);
     }
 
     // 비디오 업로드 서비스 REST API
     @PostMapping
-    public ResponseEntity<String> uploadVideo(@RequestParam("files") final MultipartFile[] files) throws Exception {
+    public ResponseEntity<String> uploadVideo(@CookieValue(name = "accessToken", required = true) final String token,
+            @RequestParam("files") final MultipartFile[] files) throws Exception {
         log.debug("파일 업로드 프로세스");;
-        UserDetails userDetails = jwtTokenProvider.getUserDetails();
-        String email = userDetails.getUsername();
+        String email = jwtTokenProvider.getUserEmail(token);
         log.debug("userName: {}", email);
         videoService.uploadVideo(files, email);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.genesislab.videoservice.domain.member.service;
 
+import com.genesislab.videoservice.domain.member.dto.DateQuery;
 import com.genesislab.videoservice.domain.member.dto.MemberResponse;
 import com.genesislab.videoservice.domain.member.dto.Result;
 import com.genesislab.videoservice.domain.member.entity.Member;
@@ -25,9 +26,9 @@ public class MemberStatisticService {
     private final JPAQueryFactory queryFactory;
 
     @Transactional
-    public Result getMembersByDate(final String startDate, final String endDate) {
-        LocalDateTime startDateTime = LocalDateUtils.parseStartDate(startDate);
-        LocalDateTime endDateTime = LocalDateUtils.parseEndDate(endDate);
+    public Result getMembersByDate(final DateQuery dateQuery) {
+        LocalDateTime startDateTime = LocalDateUtils.parseStartDate(dateQuery.getStartDate());
+        LocalDateTime endDateTime = LocalDateUtils.parseEndDate(dateQuery.getEndDate());
 
         List<Member> members = findMembersByDateQueries(startDateTime, endDateTime);
         List<MemberResponse> memberResponses = members.stream()
