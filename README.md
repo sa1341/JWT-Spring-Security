@@ -458,9 +458,12 @@ file:
 ```
 
 
-## 비디오 재생 서비스 데모 결과 화면
+### 비디오 재생 서비스 데모 결과 화면
 
 ![KakaoTalk_Photo_2021-05-02-22-16-52](https://user-images.githubusercontent.com/22395934/116814480-2178b380-ab94-11eb-8fc8-748579375706.png)
 
+### 회원 통계 기능 데모 결과 화면
+
+![스크린샷 2021-05-03 오전 12 05 57](https://user-images.githubusercontent.com/22395934/116818048-57259880-aba4-11eb-9d57-fa7257f48b23.png)
 
 
